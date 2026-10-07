@@ -1,3 +1,6 @@
+@font-face { font-family: Vazirmatn; font-style: normal; font-weight: 400; font-display: swap; src: url("./assets/fonts/vazirmatn-arabic-400-normal.woff2") format("woff2"); }
+@font-face { font-family: Vazirmatn; font-style: normal; font-weight: 600; font-display: swap; src: url("./assets/fonts/vazirmatn-arabic-600-normal.woff2") format("woff2"); }
+@font-face { font-family: Vazirmatn; font-style: normal; font-weight: 700; font-display: swap; src: url("./assets/fonts/vazirmatn-arabic-700-normal.woff2") format("woff2"); }
 /* ============================================================================
    openGym — design system
    ----------------------------------------------------------------------------
@@ -215,7 +218,7 @@ h4.sec{
 .sect-f{font-size:13px;color:var(--label-2);padding:7px 4px 0;line-height:1.38}
 
 .lrow{
-  display:flex;align-items:center;gap:12px;width:100%;text-align:left;
+  display:flex;align-items:center;gap:12px;width:100%;text-align:start;
   padding:11px 14px;min-height:46px;position:relative;color:var(--label);
   background:none;
 }
@@ -337,7 +340,7 @@ h4.sec{
 .item{
   display:flex;align-items:center;gap:12px;background:var(--surface);
   border-radius:var(--r-card);padding:10px 12px;min-height:60px;
-  transition:background var(--fast);text-align:left;width:100%;
+  transition:background var(--fast);text-align:start;width:100%;
 }
 .item:active{background:var(--surface-2)}
 .thumb{width:50px;height:50px;border-radius:9px;object-fit:cover;background:#fff;flex:none}
@@ -392,7 +395,7 @@ h4.sec{
   position:absolute;left:11px;font-size:16px;color:var(--label-3);
   pointer-events:none;--icon-stroke:2.1;z-index:1;
 }
-.searchf .field{padding-left:35px;padding-right:36px;background:var(--surface-2);border-radius:10px}
+.searchf .field{padding-inline-start:35px;padding-inline-end:36px;background:var(--surface-2);border-radius:10px}
 :root[data-theme="light"] .searchf .field{background:rgba(118,118,128,.12)}
 .searchf .clear{
   position:absolute;right:8px;width:22px;height:22px;border-radius:50%;
@@ -401,7 +404,7 @@ h4.sec{
 }
 /* legacy .search wrapper */
 .search{position:relative}
-.search .input{padding-left:35px;background:var(--surface-2);border-radius:10px}
+.search .input{padding-inline-start:35px;background:var(--surface-2);border-radius:10px}
 :root[data-theme="light"] .search .input{background:rgba(118,118,128,.12)}
 .search>svg{
   position:absolute;left:11px;top:50%;transform:translateY(-50%);z-index:1;
@@ -624,7 +627,7 @@ h4.sec{
 #timer.rest .head{display:flex;align-items:center;gap:12px}
 #timer.rest .acts{display:flex;align-items:center;gap:8px}
 #timer.rest .acts .btn{padding-top:11px;padding-bottom:11px}   /* sweaty hands, mid-set */
-#timer.rest .acts .skip{margin-left:auto;min-width:84px}
+#timer.rest .acts .skip{margin-inline-start:auto;min-width:84px}
 /* work timer (issue #16): the same bar doing the opposite job — outlined and tinted so a
    glance tells "you are holding this" apart from "you are recovering". */
 #timer.working{border:var(--hair) solid var(--acc)}
@@ -715,7 +718,7 @@ h4.sec{
 .bw-read .u{font-size:19px;color:var(--label-2);font-weight:400;letter-spacing:-.01em}
 .bwin{display:flex;align-items:baseline;justify-content:center;gap:7px;margin:16px 0}
 .bwin input{
-  width:150px;background:none;border:none;outline:none;text-align:right;
+  width:150px;background:none;border:none;outline:none;text-align:end;
   font-size:52px;font-weight:600;letter-spacing:-.035em;color:var(--label);
 }
 .bwin span{color:var(--label-2);font-size:19px}
@@ -736,7 +739,7 @@ h4.sec{
 /* --- activity heatmap --- */
 .hm-wrap{overflow-x:auto;-webkit-overflow-scrolling:touch;scrollbar-width:none;padding-bottom:2px}
 .hm-wrap::-webkit-scrollbar{display:none}
-.hm-months{display:flex;margin-left:28px;margin-bottom:5px}
+.hm-months{display:flex;margin-inline-start:28px;margin-bottom:5px}
 .hm-months span{flex:none;width:14px;font-size:11px;color:var(--label-3);white-space:nowrap;overflow:visible}
 .hm-body{display:flex}
 .hm-days{display:flex;flex-direction:column;gap:3px;flex:none;width:28px}
@@ -783,7 +786,7 @@ h4.sec{
 .mrow .nm{flex:1;min-width:0;font-size:14px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 .mrow .bar{width:74px;height:5px;border-radius:3px;background:var(--surface-2);flex:none;overflow:hidden}
 .mrow .bar i{display:block;height:100%;background:var(--acc);border-radius:3px}
-.mrow .v{font-size:12px;color:var(--label-2);min-width:52px;text-align:right;flex:none}
+.mrow .v{font-size:12px;color:var(--label-2);min-width:52px;text-align:end;flex:none}
 /* A headline number inside a card — tile weight without a tile around it, for the pair of
    readings at the top of the effort card. */
 .stat-v{font-size:26px;font-weight:600;letter-spacing:-.026em;line-height:1.1}
@@ -827,7 +830,7 @@ h4.sec{
 .empty{text-align:center;color:var(--label-2);padding:44px 20px;font-size:15px;line-height:1.45}
 .empty .ico{font-size:34px;color:var(--label-2);margin-bottom:12px;display:flex;justify-content:center}
 .steps-list{
-  padding-left:18px;color:var(--label-2);font-size:15px;line-height:1.5;
+  padding-inline-start:18px;color:var(--label-2);font-size:15px;line-height:1.5;
   display:flex;flex-direction:column;gap:9px;
 }
 .steps-list::marker{color:var(--label-3)}
@@ -848,7 +851,7 @@ h4.sec{
 .cal-d i.plan{background:var(--label-3)}
 .cal-d i.ovr{background:var(--orange)}
 .cal-legend{display:flex;gap:14px;justify-content:center;margin-top:12px;font-size:12px;color:var(--label-3)}
-.cal-legend i{display:inline-block;width:6px;height:6px;border-radius:50%;margin-right:5px}
+.cal-legend i{display:inline-block;width:6px;height:6px;border-radius:50%;margin-inline-end:5px}
 
 /* --- accent swatches --- */
 .swatches{display:flex;gap:12px;flex-wrap:wrap}
@@ -878,7 +881,7 @@ h4.sec{
 .today-row{
   display:flex;align-items:center;justify-content:space-between;gap:10px;
   margin-top:12px;padding:12px 14px;border-radius:var(--r);background:var(--surface-2);
-  transition:background var(--fast);width:100%;text-align:left;
+  transition:background var(--fast);width:100%;text-align:start;
 }
 .today-row:active{background:var(--surface-3)}
 .today-row .lbl2{font-size:11px;font-weight:500;letter-spacing:.03em;text-transform:uppercase;color:var(--label-3)}
@@ -913,3 +916,22 @@ h4.sec{
   .exmedia img{height:380px}
   .hm-wrap{display:flex;flex-direction:column;align-items:center}
 }
+
+/* Persian layout. Keep time-series plots and numeric control geometry LTR. */
+:root[lang="fa"] body { font-family: Vazirmatn, Tahoma, "Segoe UI", system-ui, sans-serif; letter-spacing: 0; line-height: 1.65; }
+:root[lang="fa"] :where(h1,h2,h3,h4,.tt,.ss,.lrow-t,.lrow-s,.sect-f,.t-large,.t-title,.t-title2,.t-head,.t-body,.t-callout,.t-sub,.t-foot,.t-cap) { letter-spacing: 0; line-height: 1.6; }
+:root[dir="rtl"] .lrow+.lrow::before,
+:root[dir="rtl"] .efftbl .r+.r::before { left: 0; right: 14px; }
+:root[dir="rtl"] .lrow:has(.lrow-i)+.lrow:has(.lrow-i)::before { left: 0; right: 55px; }
+:root[dir="rtl"] .searchf .lead,
+:root[dir="rtl"] .search>svg { left: auto; right: 11px; }
+:root[dir="rtl"] .searchf .clear { right: auto; left: 8px; }
+:root[dir="rtl"] .seg-sel { left: auto; right: 2px; transform: translateX(calc(-100% * var(--i))); }
+:root[dir="rtl"] .sw.on .knob { transform: translateX(-20px); }
+:root[dir="rtl"] .sw.on:active .knob { transform: translateX(-16px); }
+.sld,.stp,.bw-read,.hm-wrap,.timef,input[type="number"],input[type="time"],.num,#timer .t { direction: ltr; }
+:root[dir="rtl"] .icn.directional { transform: scaleX(-1); }
+
+:root[dir="rtl"] .setrow+.setrow::before { left: 0; right: 32px; }
+.chart-i { direction: ltr; }
+.chart-i .chart-tip { direction: inherit; }

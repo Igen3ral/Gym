@@ -134,7 +134,7 @@ export default function Icon({ name, size, className = '', style, ...rest }) {
   const s = size ? { width: size, height: size } : null
   return (
     <svg
-      className={'icn ' + className}
+      className={'icn ' + (['chevronLeft', 'chevronRight', 'arrowLeft', 'arrowRight'].includes(name) ? 'directional ' : '') + className}
       viewBox="0 0 24 24"
       aria-hidden="true"
       focusable="false"

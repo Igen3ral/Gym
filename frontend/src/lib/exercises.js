@@ -26,6 +26,14 @@ export function registerCustom(list) {
 // Full searchable catalogue — customs first so your own exercises are easy to find.
 export const allExercises = st => [...(st.customEx || []), ...EXDB]
 
+const searchText = value => String(value || '').toLowerCase().replace(/ي/g, 'ی').replace(/ك/g, 'ک').trim()
+export function matchesExercise(ex, query) {
+  const q = searchText(query)
+  if (!q) return true
+  const fields = [ex.n, ex.desc, ex.bp, ex.tg, ex.eq, ...(ex.sm || [])]
+  return fields.some(value => searchText(value).includes(q) || searchText(t(value || '')).includes(q))
+}
+
 // Media normally sits next to the app (img/ and gif/, mounted into the web container).
 // A build can point them somewhere else — the demo build pulls them off a CDN instead of
 // shipping ~140 MB of images into the deployment.

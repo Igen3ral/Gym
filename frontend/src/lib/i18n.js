@@ -9,12 +9,14 @@ import { useSyncExternalStore } from 'react'
 export const LANGS = {
   en: 'English', de: 'Deutsch', es: 'Español', fr: 'Français', it: 'Italiano',
   pt: 'Português', pl: 'Polski', tr: 'Türkçe', ru: 'Русский', zh: '中文',
-  ko: '한국어', hi: 'हिन्दी'
+  ko: '한국어', hi: 'हिन्दी', fa: 'فارسی'
 }
 export const INSTR_LANGS = ['en', 'es', 'fr', 'it', 'tr', 'ru', 'zh', 'hi', 'pl', 'ko']
 const DATE_LOCALES = {
   en: 'en-GB', de: 'de-DE', es: 'es-ES', fr: 'fr-FR', it: 'it-IT', pt: 'pt-PT',
-  pl: 'pl-PL', tr: 'tr-TR', ru: 'ru-RU', zh: 'zh-CN', ko: 'ko-KR', hi: 'hi-IN'
+  pl: 'pl-PL', tr: 'tr-TR', ru: 'ru-RU', zh: 'zh-CN', ko: 'ko-KR', hi: 'hi-IN',
+  // The calendar grids use Gregorian month boundaries. Keep labels consistent with them.
+  fa: 'fa-IR-u-ca-gregory'
 }
 
 const localePacks = import.meta.glob('../locales/*.js')
@@ -24,16 +26,21 @@ let lang = 'en'
 let dict = {}
 let instr = null            // { exId: [steps] } for the current language, null = English
 let version = 0
+let languageRequest = 0
 const subs = new Set()
 const notify = () => { version++; subs.forEach(f => f()) }
 
 export const getLang = () => lang
 export const dateLocale = () => DATE_LOCALES[lang] || 'en-GB'
+export const direction = () => lang === 'fa' ? 'rtl' : 'ltr'
 
 // Translate a source string; {0},{1}… are replaced with args (also on the English fallback).
 export function t(s, ...args) {
   let v = dict[s] || s
-  for (let i = 0; i < args.length; i++) v = v.replaceAll('{' + i + '}', args[i])
+  for (let i = 0; i < args.length; i++) {
+    const arg = lang === 'fa' && typeof args[i] === 'number' ? args[i].toLocaleString('fa-IR') : args[i]
+    v = v.replaceAll('{' + i + '}', arg)
+  }
   return v
 }
 // Instructions for an exercise in the current language (English steps as fallback).
@@ -41,12 +48,19 @@ export const instrFor = ex => (instr && instr[ex.id]) || ex.st || []
 
 export async function setLang(l) {
   if (!LANGS[l]) l = 'en'
+  const request = ++languageRequest
   if (l === lang && version > 0) return
+  let nextDict = l === 'en' ? {} : (await localePacks['../locales/' + l + '.js']()).default
+  if (l === 'fa') nextDict = { ...nextDict, ...(await import('../extra-locales/fa.js')).default }
+  const nextInstr = l === 'en' || !INSTR_LANGS.includes(l) ? null : (await instrPacks['../instr/' + l + '.js']()).default
+  if (request !== languageRequest) return
   lang = l
-  try {
-    dict = l === 'en' ? {} : (await localePacks['../locales/' + l + '.js']()).default
-    instr = l === 'en' || !INSTR_LANGS.includes(l) ? null : (await instrPacks['../instr/' + l + '.js']()).default
-  } catch (e) { dict = {}; instr = null }
+  dict = nextDict
+  instr = nextInstr
+  if (typeof document !== 'undefined') {
+    document.documentElement.lang = lang
+    document.documentElement.dir = direction()
+  }
   notify()
 }
 
