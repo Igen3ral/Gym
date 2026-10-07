@@ -1,7 +1,13 @@
-import { EXDB } from './exercises-data.js'
-import { t } from './i18n.js'
+import { EXDB as sourceExercises } from './exercises-data.js'
+import { t, exerciseName } from './i18n.js'
 
-export { EXDB }
+// Localize every consumer (cards, stats, exports, media alt text) while preserving
+// the source dataset and stable IDs. Custom exercise names remain user-owned.
+export const EXDB = sourceExercises.map(source => ({
+  ...source,
+  get n() { return exerciseName(source) },
+  sourceName: source.n
+}))
 export const EXIDX = {}
 EXDB.forEach(e => { EXIDX[e.id] = e })
 export const BODYPARTS = [...new Set(EXDB.map(e => e.bp))].sort()
@@ -30,7 +36,7 @@ const searchText = value => String(value || '').toLowerCase().replace(/ي/g, 'ی
 export function matchesExercise(ex, query) {
   const q = searchText(query)
   if (!q) return true
-  const fields = [ex.n, ex.desc, ex.bp, ex.tg, ex.eq, ...(ex.sm || [])]
+  const fields = [ex.n, ex.sourceName, ex.desc, ex.bp, ex.tg, ex.eq, ...(ex.sm || [])]
   return fields.some(value => searchText(value).includes(q) || searchText(t(value || '')).includes(q))
 }
 

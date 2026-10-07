@@ -1,5 +1,12 @@
 // Additional Persian operator and accessibility strings. Other languages use English fallback.
 export default {
+  "Passkey verification failed": "تأیید کلید ورود ناموفق بود؛ دوباره تلاش کنید.",
+  "Server request failed ({0})": "درخواست به سرور ناموفق بود (کد {0}).",
+  "The request failed. Please try again.": "انجام درخواست ناموفق بود؛ دوباره تلاش کنید.",
+  "lbs": "پوند",
+  "km/h": "کیلومتر بر ساعت",
+  "min": "دقیقه",
+  "sec": "ثانیه",
   "Loading…": "در حال بارگذاری…",
   "admin": "مدیر",
   "disabled": "غیرفعال",

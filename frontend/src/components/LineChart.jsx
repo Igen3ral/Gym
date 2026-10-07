@@ -74,7 +74,7 @@ export default function LineChart({ points, h = 150, unit = '', color = 'var(--a
     if (ticks.length === 0 && !single) {
       for (let i = 0; i <= 2; i++) {
         const tv = t0 + (t1 - t0) * i / 2, dd = new Date(tv)
-        ticks.push({ t: tv, txt: dd.getDate() + ' ' + t(MONTHS[dd.getMonth()]), anchor: i === 0 ? 'start' : i === 2 ? 'end' : 'middle' })
+        ticks.push({ t: tv, txt: fmtNum(dd.getDate()) + ' ' + t(MONTHS[dd.getMonth()]), anchor: i === 0 ? 'start' : i === 2 ? 'end' : 'middle' })
       }
     }
     const every = Math.max(1, Math.ceil(ticks.length / 7))
@@ -132,7 +132,7 @@ export default function LineChart({ points, h = 150, unit = '', color = 'var(--a
         </g>}
       </svg>
       {hover && <div className="ctip" ref={tipRef}>
-        {fmtDate(hover.iso, true)} · {fmtNum(hover.v)}{unit ? ' ' + unit : ''}{hover.note ? ' · ' + hover.note : ''}
+        {fmtDate(hover.iso, true)} · {fmtNum(hover.v)}{unit ? ' ' + t(unit) : ''}{hover.note ? ' · ' + hover.note : ''}
       </div>}
     </div>
   )

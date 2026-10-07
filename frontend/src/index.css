@@ -935,3 +935,5 @@ h4.sec{
 :root[dir="rtl"] .setrow+.setrow::before { left: 0; right: 32px; }
 .chart-i { direction: ltr; }
 .chart-i .chart-tip { direction: inherit; }
+
+:root[dir="rtl"] .ctip { direction: rtl; text-align: start; }

@@ -122,7 +122,7 @@ export function Stepper({ value, step = 1, onChange, decimal = true, className =
       <button onClick={() => set((+value || 0) - step)} aria-label={t("Decrease")}><Icon name="minus" /></button>
       <span className="val">
         <NumberField value={value} decimal={decimal} onChange={onChange} />
-        {unit && <i>{unit}</i>}
+        {unit && <i>{t(unit)}</i>}
       </span>
       <button onClick={() => set((+value || 0) + step)} aria-label={t("Increase")}><Icon name="plus" /></button>
     </div>

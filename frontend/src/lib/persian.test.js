@@ -2,15 +2,69 @@ import { afterEach, describe, expect, it, vi } from 'vitest'
 import fa from '../locales/fa.js'
 import tr from '../locales/tr.js'
 import extra from '../extra-locales/fa.js'
-import { dateLocale, direction, getLang, setLang, t } from './i18n.js'
+import { dateLocale, direction, getLang, setLang, t, instrFor, instructionsLanguage, errorText } from './i18n.js'
 import { fmtDate, fmtDur, fmtNum, todayISO } from './format.js'
 import { numberDraft, persianDigits } from './numeric-input.js'
 import { planPrintHTML } from './plan-share.js'
-import { matchesExercise } from './exercises.js'
+import { EXDB, EXIDX, matchesExercise } from './exercises.js'
+import sourceNames from '../exercise-names/fa.js'
+import reviewedInstructions from '../instr/fa.js'
+import { parseWorkoutCSV } from './import-csv.js'
 
 afterEach(async () => { await setLang('en'); vi.unstubAllGlobals() })
 
 describe('Persian localization', () => {
+  it('covers every built-in exercise name without changing IDs or custom names', async () => {
+    expect(Object.keys(sourceNames).sort()).toEqual(EXDB.map(ex => ex.id).sort())
+    await setLang('fa')
+    for (const ex of EXDB) {
+      expect(ex.n, ex.id).toMatch(/[\u0600-\u06ff]/)
+      expect(ex.n, ex.id).not.toMatch(/[a-z]/i)
+      expect(matchesExercise(ex, ex.sourceName), ex.id).toBe(true)
+    }
+    const custom = { id: 'custom_test', n: 'My exercise' }
+    expect(custom.n).toBe('My exercise')
+    expect(EXIDX['0001'].n).toBe('درازونشست سه‌چهارم')
+    await setLang('en')
+    expect(EXIDX['0001'].n).toBe('3/4 sit-up')
+  })
+
+  it('continues matching original CSV exercise names while Persian is active', async () => {
+    await setLang('fa')
+    const ex = EXDB.find(e => e.sourceName === 'band concentration curl')
+    const result = parseWorkoutCSV('Date,Exercise,Weight,Reps\n2026-10-07,band concentration curl,20,10', { unit: 'kg' })
+    expect(result.error).toBeUndefined()
+    expect(result.workouts[0].entries[0].id).toBe(ex.id)
+  })
+
+  it('keeps reviewed instructions aligned with source steps and labels English fallback', async () => {
+    await setLang('fa')
+    for (const [id, steps] of Object.entries(reviewedInstructions)) {
+      expect(steps.length, id).toBe(EXIDX[id].st.length)
+      expect(instrFor(EXIDX[id]), id).toEqual(steps)
+      expect(instructionsLanguage(EXIDX[id]), id).toBe('fa')
+      for (const step of steps) {
+        expect(step).toMatch(/[\u0600-\u06ff]/)
+        expect(step).not.toMatch(/[a-z]/i)
+      }
+    }
+    const untranslated = { id: 'untranslated_example', st: ['Source instructions'] }
+    expect(instructionsLanguage(untranslated)).toBe('en')
+    expect(instrFor(untranslated)).toEqual(untranslated.st)
+    await setLang('en')
+    expect(instrFor(EXIDX['0001'])).toEqual(EXIDX['0001'].st)
+  })
+
+  it('localizes units and unknown API diagnostics without exposing raw English', async () => {
+    await setLang('fa')
+    expect(t('Weight ({0})', 'kg')).toBe('وزنه (کیلوگرم)')
+    expect(errorText('verification failed: invalid challenge')).toMatch(/تأیید کلید ورود/)
+    expect(errorText('HTTP 503')).toContain('۵۰۳')
+    expect(errorText('Provider runtime error')).toBe('انجام درخواست ناموفق بود؛ دوباره تلاش کنید.')
+    await setLang('en')
+    expect(errorText('Provider runtime error')).toBe('Provider runtime error')
+  })
+
   it('covers every existing UI key and preserves every interpolation placeholder', () => {
     expect(Object.keys(fa).sort()).toEqual(Object.keys(tr).sort())
     for (const [source, translated] of Object.entries({ ...fa, ...extra })) {

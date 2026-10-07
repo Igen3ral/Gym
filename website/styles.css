@@ -27,7 +27,7 @@ nav {
 .brand { display: flex; align-items: center; gap: 10px; font-weight: 700; font-size: 18px; color: var(--fg); }
 .brand:hover { text-decoration: none; }
 .brand svg { width: 26px; height: 26px; }
-.nav-links { display: flex; gap: 18px; margin-left: auto; align-items: center; flex-wrap: wrap; }
+.nav-links { display: flex; gap: 18px; margin-inline-start: auto; align-items: center; flex-wrap: wrap; }
 .nav-links a { color: var(--dim); font-size: 14.5px; font-weight: 500; }
 .nav-links a:hover { color: var(--fg); text-decoration: none; }
 .nav-links a.cta { color: #0c0e12; background: var(--acc); padding: 7px 14px; border-radius: 10px; font-weight: 600; }
@@ -99,8 +99,8 @@ h2 { font-size: clamp(26px, 4.5vw, 34px); letter-spacing: -.02em; margin: 6px 0 
 .card h3 { font-size: 20px; margin-bottom: 4px; display: flex; gap: 9px; align-items: center; }
 .card .for { color: var(--faint); font-size: 13.5px; margin-bottom: 14px; }
 .card ul { list-style: none; padding: 0; margin: 0 0 18px; }
-.card li { padding: 6px 0 6px 26px; position: relative; font-size: 14.5px; color: var(--dim); }
-.card li::before { content: "✓"; position: absolute; left: 2px; color: var(--acc); font-weight: 700; }
+.card li { padding: 6px 0; padding-inline-start: 26px; position: relative; font-size: 14.5px; color: var(--dim); }
+.card li::before { content: "✓"; position: absolute; inset-inline-start: 2px; color: var(--acc); font-weight: 700; }
 .card li.no::before { content: "—"; color: var(--faint); }
 .card .btn { width: 100%; justify-content: center; }
 .meta { font-size: 12.5px; color: var(--faint); margin-top: 10px; text-align: center; }
@@ -127,10 +127,10 @@ h2 { font-size: clamp(26px, 4.5vw, 34px); letter-spacing: -.02em; margin: 6px 0 
 .prose h2 { font-size: 24px; margin: 44px 0 10px; }
 .prose h3 { font-size: 17.5px; margin: 26px 0 8px; }
 .prose p, .prose li { color: #c7c7cc; font-size: 15.5px; }
-.prose ul, .prose ol { padding-left: 22px; margin: 10px 0; }
+.prose ul, .prose ol { padding-inline-start: 22px; margin: 10px 0; }
 .prose li { margin: 5px 0; }
 .note {
-  background: var(--acc-dim); border-left: 3px solid var(--acc);
+  background: var(--acc-dim); border-inline-start: 3px solid var(--acc);
   border-radius: 0 10px 10px 0; padding: 12px 16px; margin: 16px 0; font-size: 14.5px;
 }
 pre {
@@ -145,10 +145,10 @@ p code, li code { background: var(--card2); border-radius: 6px; padding: 1.5px 6
 
 /* ---------- timeline ---------- */
 .tl { list-style: none; padding: 0; margin: 26px 0; position: relative; }
-.tl::before { content: ""; position: absolute; left: 7px; top: 6px; bottom: 6px; width: 2px; background: var(--line); }
+.tl::before { content: ""; position: absolute; inset-inline-start: 7px; top: 6px; bottom: 6px; width: 2px; background: var(--line); }
 .tl li { position: relative; padding: 0 0 26px 34px; }
 .tl li::before {
-  content: ""; position: absolute; left: 0; top: 6px; width: 12px; height: 12px;
+  content: ""; position: absolute; inset-inline-start: 0; top: 6px; width: 12px; height: 12px;
   border-radius: 50%; background: var(--bg); border: 3px solid var(--acc);
 }
 .tl b { display: block; font-size: 16.5px; color: var(--fg); }
@@ -158,7 +158,7 @@ p code, li code { background: var(--card2); border-radius: 6px; padding: 1.5px 6
 /* ---------- footer ---------- */
 footer { border-top: 1px solid var(--line); margin-top: 70px; padding: 30px 0 46px; }
 .foot { display: flex; gap: 20px; flex-wrap: wrap; align-items: center; color: var(--faint); font-size: 14px; }
-.foot .links { margin-left: auto; display: flex; gap: 16px; flex-wrap: wrap; }
+.foot .links { margin-inline-start: auto; display: flex; gap: 16px; flex-wrap: wrap; }
 .foot a { color: var(--dim); }
 
 @media (max-width: 640px) {
@@ -167,3 +167,15 @@ footer { border-top: 1px solid var(--line); margin-top: 70px; padding: 30px 0 46
   .nav-in { gap: 12px; }
   header.hero { padding-top: 52px; }
 }
+
+/* Persian typography and logical alignment. Code retains its executable order. */
+@font-face{font-family:Vazirmatn;src:url("fonts/vazirmatn-arabic-400-normal.woff2") format("woff2");font-weight:400;font-display:swap}
+@font-face{font-family:Vazirmatn;src:url("fonts/vazirmatn-arabic-600-normal.woff2") format("woff2");font-weight:600;font-display:swap}
+@font-face{font-family:Vazirmatn;src:url("fonts/vazirmatn-arabic-700-normal.woff2") format("woff2");font-weight:700;font-display:swap}
+:root[lang="fa"] body{font-family:Vazirmatn,Tahoma,sans-serif;line-height:1.9;text-align:start}
+:root[lang="fa"] :is(h1,h2,h3,p,.lead,.tag,.sub){letter-spacing:0}
+pre,code{direction:ltr;unicode-bidi:isolate;text-align:left}
+pre{white-space:pre;max-width:100%}
+.note{border-radius:10px 0 0 10px}
+.nav-in .brand img{border-radius:6px}
+.hero .logo img{border-radius:26px}
