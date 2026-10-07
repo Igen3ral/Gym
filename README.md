@@ -1,3 +1,5 @@
+> **نسخهٔ فارسی:** [راهنمای نصب و دسترسی](README.fa.md) — رابط فارسی، راست‌به‌چپ و فونت وزیرمتن.
+
 <div align="center">
 
 <img src="assets/banner.png" alt="openGym" width="720">
@@ -33,8 +35,8 @@ No account on someone else's server, no subscription, no ads. Just `docker compo
 > optional feature: an AI that **designs** your training plan and **revises it from what you
 > actually log**, running on your own server under your own provider account.
 >
-> Everything else is upstream openGym. With the Coach switched off, this is byte-for-byte the
-> app it forked from.
+> The core tracker is based on upstream openGym. This fork also adds Persian UI localization
+> and right-to-left layouts; exercise names and instructions still fall back to English.
 >
 > **→ [What it does and how to use it](docs/AI_COACH.md)** ·
 > [Claude setup](Claude-setup-instructions.md) ·

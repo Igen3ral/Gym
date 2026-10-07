@@ -15,6 +15,8 @@
 
 import { useRef, useState, useEffect, useCallback, forwardRef } from 'react'
 import Icon from './Icon.jsx'
+import { t, getLang } from '../lib/i18n.js'
+import { numberDraft, persianDigits } from '../lib/numeric-input.js'
 
 /* ============================ text ============================ */
 
@@ -29,9 +31,7 @@ export function NumberField({ value, onChange, decimal = true, nullable = false,
   // null and undefined are the same "empty" here — a nullable field's key is dropped once cleared.
   if (draft !== null && (committed.current ?? null) !== (value ?? null)) { setDraft(null); committed.current = null }
   const commit = raw => {
-    let s = raw.replace(/,/g, '.').replace(/[^0-9.]/g, '')
-    const i = s.indexOf('.')
-    if (i !== -1) s = decimal ? s.slice(0, i + 1) + s.slice(i + 1).replace(/\./g, '') : s.slice(0, i)
+    const s = numberDraft(raw, decimal)
     const n = s === '' || s === '.' ? (nullable ? null : 0) : Math.max(0, parseFloat(s))
     committed.current = n
     setDraft(s)
@@ -42,7 +42,7 @@ export function NumberField({ value, onChange, decimal = true, nullable = false,
       type="text"
       inputMode={decimal ? 'decimal' : 'numeric'}
       className={'num ' + className}
-      value={draft ?? (value ?? '')}
+      value={getLang() === 'fa' ? persianDigits(draft ?? (value ?? '')) : draft ?? (value ?? '')}
       onFocus={e => e.target.select()}
       onChange={e => commit(e.target.value)}
       onBlur={() => { setDraft(null); committed.current = null }}
@@ -66,7 +66,7 @@ export function SearchField({ value, onChange, onClear, ...rest }) {
       <Icon name="magnifier" className="lead" />
       <input className="field" value={value} onChange={onChange} {...rest} />
       {!!value && (
-        <button className="clear" onClick={onClear} aria-label="Clear">
+        <button className="clear" onClick={onClear} aria-label={t("Clear")}>
           <Icon name="xmark" />
         </button>
       )}
@@ -119,12 +119,12 @@ export function Stepper({ value, step = 1, onChange, decimal = true, className =
   const set = v => onChange(Math.max(0, Math.round((v || 0) * 100) / 100))
   const inner = (
     <div className={'stp ' + className}>
-      <button onClick={() => set((+value || 0) - step)} aria-label="Decrease"><Icon name="minus" /></button>
+      <button onClick={() => set((+value || 0) - step)} aria-label={t("Decrease")}><Icon name="minus" /></button>
       <span className="val">
         <NumberField value={value} decimal={decimal} onChange={onChange} />
-        {unit && <i>{unit}</i>}
+        {unit && <i>{t(unit)}</i>}
       </span>
-      <button onClick={() => set((+value || 0) + step)} aria-label="Increase"><Icon name="plus" /></button>
+      <button onClick={() => set((+value || 0) + step)} aria-label={t("Increase")}><Icon name="plus" /></button>
     </div>
   )
   if (!label) return inner

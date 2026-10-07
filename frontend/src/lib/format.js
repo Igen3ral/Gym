@@ -1,5 +1,5 @@
 // Formatting + date helpers (ported from the vanilla app, unit taken from the store where needed).
-import { dateLocale, t } from './i18n.js'
+import { dateLocale, getLang, t } from './i18n.js'
 export const todayISO = () => {
   const d = new Date()
   return d.getFullYear() + '-' + String(d.getMonth() + 1).padStart(2, '0') + '-' + String(d.getDate()).padStart(2, '0')
@@ -18,6 +18,7 @@ export function fmtDate(iso, long) {
 }
 export function fmtDur(ms) {
   const m = Math.floor(ms / 60000)
+  if (getLang() === 'fa') return m >= 60 ? t('{0} h {1} min', Math.floor(m / 60), m % 60) : t('{0} min', m)
   return m >= 60 ? Math.floor(m / 60) + 'h ' + (m % 60) + 'm' : m + ' min'
 }
 // Imported history has no clock — an unknown duration is left out rather than shown as "0 min".
@@ -28,7 +29,7 @@ export const fmtNum = n => (Math.round(n * 10) / 10).toLocaleString(dateLocale()
 // Volume stays in the profile's unit throughout: the old shorthand turned anything over
 // 10 000 into "t", which is wrong for a pound profile and made one list mix "18.8t" with
 // "7'535 kg" — two numbers you can't compare at a glance.
-export const fmtVol = (v, unit) => fmtNum(v) + ' ' + unit
+export const fmtVol = (v, unit) => fmtNum(v) + ' ' + t(unit)
 // Plural forms are not automatic when the English string is the key.
 export const exCount = n => t(n === 1 ? '{0} exercise' : '{0} exercises', n)
 

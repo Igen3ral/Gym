@@ -6,6 +6,7 @@
 // half-empty series. So everything aggregates in RIR and is converted back for display.
 // RIR is the internal unit because it has a real zero — a set taken to failure — where RPE's
 // floor of 6 is only a convention about which sets are worth rating. RPE 8 == RIR 2.
+import { t } from './i18n.js'
 import { EFFORT, effortOf } from './history.js'
 import { weekKey } from './format.js'
 
@@ -37,7 +38,7 @@ export function displayScale(S) {
   eachDoneSet(S, s => { if (s.rir != null) rir++; else if (s.rpe != null) rpe++ })
   return rpe > rir ? 'rpe' : 'rir'
 }
-export const scaleName = kind => EFFORT[kind].hd
+export const scaleName = kind => t(EFFORT[kind].hd)
 
 // Every finished set in the profile, oldest first. `fn` gets the set plus the workout it
 // belongs to, which is what the windowed and per-week views need.

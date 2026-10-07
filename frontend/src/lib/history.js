@@ -1,5 +1,6 @@
 // Pure helpers over the state object S (ported 1:1 from the vanilla app).
 import { todayISO, isoOf, weekKey, fmtNum } from './format.js'
+import { t, getLang } from './i18n.js'
 import { isCardio } from './exercises.js'
 
 // How an exercise is logged (issue #16). This used to be derived from the body part alone,
@@ -20,7 +21,8 @@ export const isTimed = cfg => modeOf(cfg) === 'time'
 // mm:ss for a work duration — seconds alone read badly past a minute ("90 s" vs "1:30").
 export function fmtSec(sec) {
   const n = Math.max(0, Math.round(Number(sec) || 0))
-  return Math.floor(n / 60) + ':' + String(n % 60).padStart(2, '0')
+  const label = Math.floor(n / 60) + ':' + String(n % 60).padStart(2, '0')
+  return getLang() === 'fa' ? label.replace(/\d/g, d => '۰۱۲۳۴۵۶۷۸۹'[d]) : label
 }
 
 // How hard a set felt, if the profile logs it at all. Two scales for the same thing, kept in
@@ -63,16 +65,16 @@ export const effortOf = S => {
 // The "(RIR 2)" / "(RPE 8)" tail on a set summary, empty when nothing was logged.
 const effortTail = s => {
   const k = s.rir != null ? 'rir' : s.rpe != null ? 'rpe' : null
-  return k ? ` (${EFFORT[k].hd} ${fmtNum(s[k])})` : ''
+  return k ? ` (${t(EFFORT[k].hd)} ${fmtNum(s[k])})` : ''
 }
 
 // One-line summary of a logged set. `cfg` carries the mode when the caller has it (a routine
 // entry or a workout entry); passing an id alone keeps the old body-part behaviour.
 export function setLabel(id, s, cfg) {
   const mode = modeOf(cfg || { id })
-  if (mode === 'cardio') return `${s.min || 0} min @ ${fmtNum(s.speed || 0)} km/h`
+  if (mode === 'cardio') return `${fmtNum(s.min || 0)} ${t('min')} @ ${fmtNum(s.speed || 0)} ${t('km/h')}`
   if (mode === 'time') return fmtSec(s.sec) + (s.w > 0 ? ` · ${fmtNum(s.w)}` : '')
-  return `${fmtNum(s.w || 0)}×${s.r || 0}` + effortTail(s)
+  return `${fmtNum(s.w || 0)}×${fmtNum(s.r || 0)}` + effortTail(s)
 }
 // Default config for a freshly added exercise.
 export function defaultConfig(id, mode) {
@@ -86,10 +88,10 @@ export function defaultConfig(id, mode) {
 export function exLine(cfg, unit) {
   const mode = modeOf(cfg)
   const n = cfg.sets || 1
-  const load = cfg.weight ? ' · ' + fmtNum(cfg.weight) + ' ' + unit : ''
-  if (mode === 'cardio') return `${n} × ${cfg.min || 20} min @ ${fmtNum(cfg.speed || 8)} km/h`
-  if (mode === 'time') return `${n} × ${fmtSec(cfg.sec || 45)}${load}`
-  return `${n} × ${cfg.reps}${load}`
+  const load = cfg.weight ? ' · ' + fmtNum(cfg.weight) + ' ' + t(unit) : ''
+  if (mode === 'cardio') return `${fmtNum(n)} × ${fmtNum(cfg.min || 20)} ${t('min')} @ ${fmtNum(cfg.speed || 8)} ${t('km/h')}`
+  if (mode === 'time') return `${fmtNum(n)} × ${fmtSec(cfg.sec || 45)}${load}`
+  return `${fmtNum(n)} × ${fmtNum(cfg.reps)}${load}`
 }
 
 // Drop superset ids that no longer have an adjacent partner (after unlink/reorder/remove).

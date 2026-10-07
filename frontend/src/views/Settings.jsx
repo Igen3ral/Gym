@@ -45,7 +45,7 @@ export default function Settings() {
     rd.onload = () => {
       try {
         const data = JSON.parse(rd.result)
-        if (!data.workouts || !data.routines) throw new Error('not an openGym backup')
+        if (!data.workouts || !data.routines) throw new Error(t('not an openGym backup'))
         confirmSheet({ title: t('Import backup?'), message: t('This replaces all current data with the backup file.'), confirmText: t('Import'), danger: true, onConfirm: () => { replaceState(Object.assign(JSON.parse(JSON.stringify(DEF)), data), true); toast(t('Backup imported')) } })
       } catch (e) { toast(t('Import failed: {0}', e.message)) }
     }
@@ -72,7 +72,7 @@ export default function Settings() {
   return <div className="narrow">
     <div className="hdr">
       <button className="iconbtn" onClick={() => nav('/home')} aria-label={t('Home')}><Icon name="chevronLeft" /></button>
-      <div style={{ flex: 1, marginLeft: 10 }}><h1>{t('Settings')}</h1></div>
+      <div style={{ flex: 1, marginInlineStart: 10 }}><h1>{t('Settings')}</h1></div>
     </div>
 
     {/* ---------- account (demo and mobile builds have nothing to sign in to) ---------- */}
@@ -105,7 +105,7 @@ export default function Settings() {
     <Section title={t('General')} footer={t('Note: switching units only changes the label — logged numbers are not converted.')}>
       <SelectRow
         icon="globe" iconTint="var(--blue)" title={t('Language')}
-        value={S.lang || 'en'} onChange={v => update(s => { s.lang = v })}
+        value={S.lang || 'fa'} onChange={v => update(s => { s.lang = v })}
         options={Object.entries(LANGS).map(([k, name]) => ({
           value: k, label: name,
           subtitle: INSTR_LANGS.includes(k) ? null : t("Exercise instructions aren't available in this language yet — they stay in English."),
@@ -113,7 +113,7 @@ export default function Settings() {
       />
       <Row icon="scale" iconTint="var(--teal)" title={t('Weight unit')}>
         <Segmented className="seg-inline"
-          options={[{ value: 'kg', label: 'kg' }, { value: 'lb', label: 'lb' }]}
+          options={[{ value: 'kg', label: t('kg') }, { value: 'lb', label: t('lb') }]}
           value={S.unit} onChange={v => update(s => { s.unit = v })} />
       </Row>
     </Section>
@@ -211,7 +211,7 @@ export default function Settings() {
 
     <div className="dim small" style={{ textAlign: 'center', marginTop: 4, lineHeight: 1.6 }}>
       openGym · {t('free & open source (AGPL v3)')}<br />
-      <a href="https://github.com/DuarteSantos8/openGym" target="_blank" rel="noopener">source code</a> · exercise data: hasaneyldrm/exercises-dataset (CC)
+      <a href={REPO} target="_blank" rel="noopener">{t('source code')}</a> · {t('exercise data:')} hasaneyldrm/exercises-dataset (CC)
     </div>
   </div>
 }

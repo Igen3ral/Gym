@@ -1,7 +1,13 @@
-import { EXDB } from './exercises-data.js'
-import { t } from './i18n.js'
+import { EXDB as sourceExercises } from './exercises-data.js'
+import { t, exerciseName } from './i18n.js'
 
-export { EXDB }
+// Localize every consumer (cards, stats, exports, media alt text) while preserving
+// the source dataset and stable IDs. Custom exercise names remain user-owned.
+export const EXDB = sourceExercises.map(source => ({
+  ...source,
+  get n() { return exerciseName(source) },
+  sourceName: source.n
+}))
 export const EXIDX = {}
 EXDB.forEach(e => { EXIDX[e.id] = e })
 export const BODYPARTS = [...new Set(EXDB.map(e => e.bp))].sort()
@@ -25,6 +31,14 @@ export function registerCustom(list) {
 }
 // Full searchable catalogue — customs first so your own exercises are easy to find.
 export const allExercises = st => [...(st.customEx || []), ...EXDB]
+
+const searchText = value => String(value || '').toLowerCase().replace(/ي/g, 'ی').replace(/ك/g, 'ک').trim()
+export function matchesExercise(ex, query) {
+  const q = searchText(query)
+  if (!q) return true
+  const fields = [ex.n, ex.sourceName, ex.desc, ex.bp, ex.tg, ex.eq, ...(ex.sm || [])]
+  return fields.some(value => searchText(value).includes(q) || searchText(t(value || '')).includes(q))
+}
 
 // Media normally sits next to the app (img/ and gif/, mounted into the web container).
 // A build can point them somewhere else — the demo build pulls them off a CDN instead of

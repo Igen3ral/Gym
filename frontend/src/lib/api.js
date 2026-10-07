@@ -1,3 +1,4 @@
+import { errorText } from './i18n.js'
 // Backend + WebAuthn helpers (ported from the vanilla app).
 export const IS_APPLE = /iPhone|iPad|iPod|Macintosh/.test(navigator.userAgent)
 export const IS_ANDROID = /Android/.test(navigator.userAgent)
@@ -8,7 +9,12 @@ export const webauthnOK = () => !!(window.PublicKeyCredential && navigator.crede
 export async function api(path, opts) {
   const r = await fetch(path, Object.assign({ headers: { 'Content-Type': 'application/json' } }, opts))
   const data = await r.json().catch(() => ({}))
-  if (!r.ok) { const e = new Error(data.error || ('HTTP ' + r.status)); e.status = r.status; throw e }
+  if (!r.ok) {
+    const diagnostic = data.error || ('HTTP ' + r.status)
+    const e = new Error(errorText(diagnostic), { cause: diagnostic })
+    e.status = r.status
+    throw e
+  }
   return data
 }
 
